@@ -49,7 +49,6 @@ describe('app routes', () => {
 
     test('makes a todo', async() => {
 
-   
       const data = await fakeRequest(app)
         .post('/api/todos')
         .send(newTodo)
@@ -63,7 +62,6 @@ describe('app routes', () => {
 
     test('gets all todos', async() => {
 
-   
       const data = await fakeRequest(app)
         .get('/api/todos')
         .set('Authorization', token)
@@ -76,7 +74,6 @@ describe('app routes', () => {
 
     test('updates a todo', async() => {
 
-   
       const data = await fakeRequest(app)
         .put('/api/todos/4')
         .send(upDatedTodo)
@@ -89,3 +86,4 @@ describe('app routes', () => {
     });
   });
 });
+   
