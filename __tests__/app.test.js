@@ -31,35 +31,59 @@ describe('app routes', () => {
       return client.end(done);
     });
 
-    test('returns animals', async() => {
+    const newTodo = {
+      todo: 'pass tests',
+      completed: false
+    };
 
-      const expectation = [
-        {
-          'id': 1,
-          'name': 'bessie',
-          'coolfactor': 3,
-          'owner_id': 1
-        },
-        {
-          'id': 2,
-          'name': 'jumpy',
-          'coolfactor': 4,
-          'owner_id': 1
-        },
-        {
-          'id': 3,
-          'name': 'spot',
-          'coolfactor': 10,
-          'owner_id': 1
-        }
-      ];
+    const dbTodo = {
+      ...newTodo,
+      id: 4,
+      owner_id:2
+    };
+    
+    const upDatedTodo = {
+      ...dbTodo,
+      completed: true
+    };
+
+    test('makes a todo', async() => {
 
       const data = await fakeRequest(app)
-        .get('/animals')
+        .post('/api/todos')
+        .send(newTodo)
+        .set('Authorization', token)
         .expect('Content-Type', /json/)
         .expect(200);
+      
+      
+      expect(data.body).toEqual(dbTodo);
+    });
 
-      expect(data.body).toEqual(expectation);
+    test('gets all todos', async() => {
+
+      const data = await fakeRequest(app)
+        .get('/api/todos')
+        .set('Authorization', token)
+        .expect('Content-Type', /json/)
+        .expect(200);
+      
+      
+      expect(data.body[0]).toEqual(dbTodo);
+    });
+
+    test('updates a todo', async() => {
+
+      const data = await fakeRequest(app)
+        .put('/api/todos/4')
+        .send(upDatedTodo)
+        .set('Authorization', token)
+        .expect('Content-Type', /json/)
+        .expect(200);
+      
+      
+      expect(data.body[0]).toEqual(upDatedTodo);
     });
   });
 });
+   
